@@ -29,11 +29,10 @@ RUN set -eux && \
   make clean
 
 # Root builder
-FROM lagdo/alpine-php-zts-grpc
+FROM php:${PHP_ALPINE_VERSION}
 
 RUN --mount=type=bind,from=mlocati/php-extension-installer:2,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
-  install-php-extensions opcache zip intl sockets bcmath ctype phar \
-  curl dom fileinfo gd mbstring openssl redis tokenizer && \
+  install-php-extensions zip tokenizer bcmath ctype curl dom fileinfo mbstring opcache openssl && \
   set -xe && apk add --no-cache --virtual .build-deps pcre-dev pcre
 
 # Nginx Unit
