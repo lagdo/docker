@@ -1,4 +1,4 @@
-FROM alpine:${3.22}
+FROM alpine:3.22
 
 # Default values for env vars.
 ENV NGINX_PORT=9222
