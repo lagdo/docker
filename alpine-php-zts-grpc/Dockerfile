@@ -27,3 +27,9 @@ COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/lo
 
 # PHP Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+LABEL maintainer="Thierry Feuzeu <thierry.feuzeu@gmail.com>" \
+  org.opencontainers.image.source="https://github.com/lagdo/docker" \
+  org.opencontainers.image.description="Threadsafe PHP with the GRPC module." \
+  org.opencontainers.image.licenses="MIT License" \
+  org.opencontainers.image.version="0.1.0"

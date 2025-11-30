@@ -1,5 +1,4 @@
-ARG ALPINE_VERSION=3.22
-FROM alpine:${ALPINE_VERSION}
+FROM alpine:${3.22}
 
 # Default values for env vars.
 ENV NGINX_PORT=9222
@@ -37,3 +36,9 @@ RUN chmod +x /sbin/runit.sh \
 WORKDIR /data/chromium
 
 ENTRYPOINT [ "/sbin/runit.sh" ]
+
+LABEL maintainer="Thierry Feuzeu <thierry.feuzeu@gmail.com>" \
+  org.opencontainers.image.source="https://github.com/lagdo/docker" \
+  org.opencontainers.image.description="A headless Chromium browser with Nginx running in front." \
+  org.opencontainers.image.licenses="MIT License" \
+  org.opencontainers.image.version="0.1.0"

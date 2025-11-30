@@ -52,3 +52,9 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock" ]
+
+LABEL maintainer="Thierry Feuzeu <thierry.feuzeu@gmail.com>" \
+  org.opencontainers.image.source="https://github.com/lagdo/docker" \
+  org.opencontainers.image.description="Nginx Unit and PHP." \
+  org.opencontainers.image.licenses="MIT License" \
+  org.opencontainers.image.version="0.1.0"
