@@ -1,6 +1,6 @@
 #!/bin/sh
 
-/usr/bin/chromium-browser --headless \
+exec chpst -u chromium /usr/bin/chromium-browser --headless \
   --disable-gpu --no-sandbox \
   --disable-software-rasterizer \
   --disable-dev-shm-usage \

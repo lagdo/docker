@@ -1,5 +1,13 @@
 # Docker images for PHP, GRPC and various application servers
 
+### alpine-chromium-nginx
+
+Alpine + Chromium + Nginx
+
+### alpine-php-nginx-unit
+
+Alpine + PHP + Nginx Unit
+
 ### alpine-php-grpc
 
 Alpine + PHP + GRPC
@@ -10,15 +18,11 @@ Alpine + PHP + GRPC (thread-safe PHP)
 
 ### alpine-php-grpc-roadrunner
 
-alpine-php-grpc + RoadRunner
-
-### alpine-php-nginx-unit
-
-Alpine + PHP + Nginx Unit
+Alpine + PHP + GRPC + RoadRunner
 
 ### alpine-php-grpc-nginx-unit
 
-alpine-php-zts-grpc + Nginx Unit
+Alpine + PHP + GRPC + Nginx Unit
 
 ### alpine-php-grpc-frankenphp
 

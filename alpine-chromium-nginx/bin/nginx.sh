@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# The env vars need to be set again
+source /etc/envvars
+
 sed -i "s/NGINX_PORT/${NGINX_PORT}/" /etc/nginx/http.d/chromium.conf
 sed -i "s/NGINX_ALLOW/${NGINX_ALLOW}/" /etc/nginx/http.d/chromium.conf
 sed -i "s/NGINX_DENY/${NGINX_DENY}/" /etc/nginx/http.d/chromium.conf
