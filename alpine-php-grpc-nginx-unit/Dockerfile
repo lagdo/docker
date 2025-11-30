@@ -31,8 +31,7 @@ RUN set -eux && \
 # Root builder
 FROM lagdo/alpine-php-zts-grpc
 
-RUN --mount=type=bind,from=mlocati/php-extension-installer:2,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
-  install-php-extensions opcache zip intl sockets bcmath ctype phar \
+RUN install-php-extensions opcache zip intl sockets bcmath ctype phar \
   curl dom fileinfo gd mbstring openssl redis tokenizer && \
   set -xe && apk add --no-cache --virtual .build-deps pcre-dev pcre
 

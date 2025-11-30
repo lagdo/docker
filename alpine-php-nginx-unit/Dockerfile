@@ -3,6 +3,9 @@ ARG PHP_VERSION=8.4
 ARG UNIT_VERSION=1.34.2
 ARG PHP_ALPINE_VERSION=${PHP_VERSION}-zts-alpine${ALPINE_VERSION}
 
+# PHP extension installer
+FROM mlocati/php-extension-installer:2 AS php-extension-installer
+
 # Nginx Unit downloader
 FROM alpine:${ALPINE_VERSION} AS nginx-unit-downloader
 
@@ -31,9 +34,13 @@ RUN set -eux && \
 # Root builder
 FROM php:${PHP_ALPINE_VERSION}
 
-RUN --mount=type=bind,from=mlocati/php-extension-installer:2,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
-  install-php-extensions zip tokenizer bcmath ctype curl dom fileinfo mbstring opcache openssl && \
+COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
+
+RUN install-php-extensions zip tokenizer bcmath ctype curl dom fileinfo mbstring opcache openssl && \
   set -xe && apk add --no-cache --virtual .build-deps pcre-dev pcre
+
+# PHP Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Nginx Unit
 COPY --from=nginx-unit-builder ["/opt/unit/", "/opt/unit/"]

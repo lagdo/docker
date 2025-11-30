@@ -2,6 +2,9 @@ ARG FRANKENPHP_VERSION=1.9.0
 ARG PHP_VERSION=8.4
 ARG PROTOBUF_VERSION=4.32.0
 
+# PHP extension installer
+FROM mlocati/php-extension-installer:2 AS php-extension-installer
+
 FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-alpine
 
 ARG PROTOBUF_VERSION
@@ -20,6 +23,10 @@ RUN set -xe && \
   apk del --no-cache autoconf grpc-dev git $PHPIZE_DEPS && \
   echo "extension=grpc.so" > /usr/local/etc/php/conf.d/grpc.ini
 
-RUN --mount=type=bind,from=mlocati/php-extension-installer:2,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
-  install-php-extensions opcache zip intl sockets bcmath ctype phar \
+COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
+
+RUN install-php-extensions opcache zip intl sockets bcmath ctype phar \
   curl dom fileinfo gd mbstring openssl redis tokenizer
+
+# PHP Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
