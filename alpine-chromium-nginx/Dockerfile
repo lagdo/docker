@@ -7,8 +7,7 @@ ENV NGINX_DENY=all
 
 # Installs latest Chromium package.
 RUN apk upgrade --no-cache --available \
-  && apk add --no-cache sed runit nginx \
-    chromium chromium-swiftshader \
+  && apk add --no-cache sed runit nginx chromium \
     ttf-freefont font-noto-emoji font-montserrat \
   && mkdir -p /etc/service/chromium \
   && mkdir -p /etc/service/nginx
