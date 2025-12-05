@@ -98,4 +98,7 @@ if [ "$1" = "unitd" ] || [ "$1" = "unitd-debug" ]; then
     fi
 fi
 
+# Install Composer packages
+/usr/local/bin/php-install.sh
+
 exec "$@"

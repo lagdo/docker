@@ -46,9 +46,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 COPY --from=nginx-unit-builder ["/opt/unit/", "/opt/unit/"]
 RUN cp -R /opt/unit/usr/local/* /usr/local
 
-# Configure Nginx Unit
+# Copy Nginx Unit entry point script
 COPY ./entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Copy PHP install script
+COPY ./php-install.sh /usr/local/bin/php-install.sh
+RUN chmod +x /usr/local/bin/php-install.sh
+
+# By default, run composer install with no additional option
+ENV COMPOSER_RUN=false
+ENV COMPOSER_RUN_OPTIONS=
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock" ]

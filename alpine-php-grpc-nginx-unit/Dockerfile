@@ -35,11 +35,11 @@ RUN install-php-extensions opcache zip intl sockets bcmath ctype phar \
   curl dom fileinfo gd mbstring openssl redis tokenizer && \
   set -xe && apk add --no-cache --virtual .build-deps pcre-dev pcre
 
-# Nginx Unit
+# Install Nginx Unit
 COPY --from=nginx-unit-builder ["/opt/unit/", "/opt/unit/"]
 RUN cp -R /opt/unit/usr/local/* /usr/local
 
-# Configure Nginx Unit
+# Copy Nginx Unit entry point script
 COPY ./entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

@@ -8,6 +8,8 @@ RUN install-php-extensions opcache zip intl sockets bcmath ctype phar \
 # RoadRunner
 COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
 
+CMD [ "/usr/local/bin/rr", "serve", "-c", "/var/www/rr.yaml" ]
+
 LABEL maintainer="Thierry Feuzeu <thierry.feuzeu@gmail.com>" \
   org.opencontainers.image.source="https://github.com/lagdo/docker" \
   org.opencontainers.image.description="RoadRunner and PHP with the GRPC module." \
