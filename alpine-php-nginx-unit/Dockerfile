@@ -36,8 +36,13 @@ FROM php:${PHP_ALPINE_VERSION}
 
 COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
 
-RUN install-php-extensions zip tokenizer bcmath ctype curl dom fileinfo mbstring opcache openssl && \
-  set -xe && apk add --no-cache --virtual .build-deps pcre-dev pcre
+RUN install-php-extensions opcache zip intl sockets bcmath ctype phar \
+  curl dom fileinfo gd mbstring openssl redis tokenizer && \
+  set -xe && apk add --no-cache --virtual .build-deps autoconf gnupg \
+  libzip libzip-dev linux-headers $PHPIZE_DEPS pcre-dev pcre && \
+  # Install PHP Pie.
+  curl -L --output /usr/bin/pie https://github.com/php/pie/releases/download/1.3.1/pie.phar && \
+  chmod +x /usr/bin/pie
 
 # PHP Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer

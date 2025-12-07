@@ -9,8 +9,8 @@ FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-alpine
 
 ARG PROTOBUF_VERSION
 RUN set -xe && \
-  apk add --no-cache git autoconf libzip-dev freetype-dev icu-dev \
-  libmcrypt-dev libxslt-dev pcre grpc-cpp grpc-dev $PHPIZE_DEPS && \
+  apk add --no-cache git autoconf gnupg libzip libzip-dev freetype-dev icu-dev \
+  libmcrypt-dev libxslt-dev pcre grpc-cpp grpc-dev linux-headers $PHPIZE_DEPS curl && \
   pecl install protobuf-${PROTOBUF_VERSION} && \
   GRPC_VERSION=$(apk info grpc -d | grep grpc | cut -d- -f2) && \
   git clone --depth 1 -b v${GRPC_VERSION} https://github.com/grpc/grpc /tmp/grpc && \
@@ -20,8 +20,11 @@ RUN set -xe && \
   make && \
   make install && \
   rm -rf /tmp/grpc && \
-  apk del --no-cache autoconf grpc-dev git $PHPIZE_DEPS && \
-  echo "extension=grpc.so" > /usr/local/etc/php/conf.d/grpc.ini
+  apk del --no-cache autoconf grpc-dev git && \
+  echo "extension=grpc.so" > /usr/local/etc/php/conf.d/grpc.ini && \
+  # Install PHP Pie.
+  curl -L --output /usr/bin/pie https://github.com/php/pie/releases/download/1.3.1/pie.phar && \
+  chmod +x /usr/bin/pie
 
 COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
 
