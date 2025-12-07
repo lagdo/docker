@@ -56,7 +56,8 @@ RUN chmod +x /usr/local/bin/php-install.sh
 
 # By default, run composer install with no additional option
 ENV COMPOSER_RUN=false
-ENV COMPOSER_RUN_OPTIONS=
+ENV COMPOSER_RUN_USER=
+ENV COMPOSER_RUN_OPTIONS=install
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock" ]
