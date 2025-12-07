@@ -1,6 +1,6 @@
 ARG ALPINE_VERSION=3.22
 ARG PHP_VERSION=8.4
-ARG PROTOBUF_VERSION=4.32.0
+ARG PROTOBUF_VERSION=4.33.0
 
 # PHP extension installer
 FROM mlocati/php-extension-installer:2 AS php-extension-installer
