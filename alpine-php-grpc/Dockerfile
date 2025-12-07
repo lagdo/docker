@@ -20,7 +20,7 @@ RUN set -xe && \
   make && \
   make install && \
   rm -rf /tmp/grpc && \
-  apk del --no-cache autoconf grpc-dev git && \
+  apk del --no-cache grpc-dev && \
   echo "extension=grpc.so" > /usr/local/etc/php/conf.d/grpc.ini && \
   # Install PHP Pie.
   curl -L --output /usr/bin/pie https://github.com/php/pie/releases/download/1.3.1/pie.phar && \
