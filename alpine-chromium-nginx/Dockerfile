@@ -6,11 +6,12 @@ ENV NGINX_ALLOW=127.0.0.2
 ENV NGINX_DENY=all
 
 # Installs latest Chromium package.
-RUN apk upgrade --no-cache --available \
-  && apk add --no-cache sed runit nginx chromium \
-    ttf-freefont font-noto-emoji font-montserrat \
-  && mkdir -p /etc/service/chromium \
-  && mkdir -p /etc/service/nginx
+RUN set -xe && \
+  apk upgrade --no-cache --available && \
+  apk add --no-cache sed runit nginx chromium \
+    ttf-freefont font-noto-emoji font-montserrat && \
+  mkdir -p /etc/service/chromium && \
+  mkdir -p /etc/service/nginx
 
 ENV CHROMIUM_BIN=/usr/bin/chromium-browser CHROMIUM_PATH=/usr/lib/chromium/
 
@@ -22,13 +23,13 @@ COPY ./bin/runit.sh /sbin/runit.sh
 COPY ./bin/chromium.sh /etc/service/chromium/run
 COPY ./bin/nginx.sh /etc/service/nginx/run
 
-RUN chmod +x /sbin/runit.sh \
-  && chmod +x /etc/service/chromium/run \
-  && chmod +x /etc/service/nginx/run \
+RUN chmod +x /sbin/runit.sh && \
+  chmod +x /etc/service/chromium/run && \
+  chmod +x /etc/service/nginx/run && \
   # Add Chrome as a user
-  && mkdir -p /data/chromium \
-  && adduser -D chromium \
-  && chown -R chromium:chromium /data/chromium
+  mkdir -p /data/chromium && \
+  adduser -D chromium && \
+  chown -R chromium:chromium /data/chromium
 
 # Run the container as root (required by Runit) # non-privileged
 # USER chromium

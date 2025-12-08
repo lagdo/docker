@@ -9,8 +9,8 @@ FROM php:${PHP_VERSION}-zts-alpine
 
 ARG PROTOBUF_VERSION
 RUN set -xe && \
-  apk add --no-cache git autoconf gnupg libzip libzip-dev freetype-dev icu-dev \
-  libmcrypt-dev libxslt-dev pcre grpc-cpp grpc-dev linux-headers $PHPIZE_DEPS curl && \
+  apk add --no-cache git autoconf libzip-dev freetype-dev icu-dev \
+    libmcrypt-dev libxslt-dev pcre grpc-cpp grpc-dev $PHPIZE_DEPS && \
   pecl install protobuf-${PROTOBUF_VERSION} && \
   GRPC_VERSION=$(apk info grpc -d | grep grpc | cut -d- -f2) && \
   git clone --depth 1 -b v${GRPC_VERSION} https://github.com/grpc/grpc /tmp/grpc && \
@@ -20,11 +20,8 @@ RUN set -xe && \
   make && \
   make install && \
   rm -rf /tmp/grpc && \
-  apk del --no-cache grpc-dev && \
-  echo "extension=grpc.so" > /usr/local/etc/php/conf.d/grpc.ini && \
-  # Install PHP Pie.
-  curl -L --output /usr/bin/pie https://github.com/php/pie/releases/download/1.3.1/pie.phar && \
-  chmod +x /usr/bin/pie
+  apk del --no-cache autoconf grpc-dev git $PHPIZE_DEPS && \
+  echo "extension=grpc.so" > /usr/local/etc/php/conf.d/grpc.ini
 
 COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
 
@@ -34,8 +31,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 # Copy PHP install scripts
 COPY ./php-install.sh /usr/local/bin/php-install.sh
 COPY ./php-entrypoint.sh /usr/local/bin/php-entrypoint.sh
-RUN chmod +x /usr/local/bin/php-install.sh
-RUN chmod +x /usr/local/bin/php-entrypoint.sh
+RUN chmod +x /usr/local/bin/php-install.sh && \
+  chmod +x /usr/local/bin/php-entrypoint.sh
 
 # By default, run composer install with no additional option
 ENV COMPOSER_RUN=false

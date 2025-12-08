@@ -36,13 +36,10 @@ FROM php:${PHP_ALPINE_VERSION}
 
 COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
 
-RUN install-php-extensions opcache zip intl sockets bcmath ctype phar \
-  curl dom fileinfo gd mbstring openssl redis tokenizer && \
-  set -xe && apk add --no-cache --virtual .build-deps autoconf gnupg \
-  libzip libzip-dev linux-headers $PHPIZE_DEPS pcre-dev pcre && \
-  # Install PHP Pie.
-  curl -L --output /usr/bin/pie https://github.com/php/pie/releases/download/1.3.1/pie.phar && \
-  chmod +x /usr/bin/pie
+RUN set -xe && \
+  apk add --no-cache --virtual .build-deps pcre-dev pcre && \
+  install-php-extensions opcache zip intl sockets bcmath \
+    ctype phar dom fileinfo gd mbstring openssl redis tokenizer
 
 # PHP Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -51,13 +48,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 COPY --from=nginx-unit-builder ["/opt/unit/", "/opt/unit/"]
 RUN cp -R /opt/unit/usr/local/* /usr/local
 
-# Copy Nginx Unit entry point script
+# Copy Nginx Unit entry point and PHP install scripts
 COPY ./entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# Copy PHP install script
 COPY ./php-install.sh /usr/local/bin/php-install.sh
-RUN chmod +x /usr/local/bin/php-install.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
+  chmod +x /usr/local/bin/php-install.sh
 
 # By default, run composer install with no additional option
 ENV COMPOSER_RUN=false
@@ -65,7 +60,7 @@ ENV COMPOSER_RUN_USER=
 ENV COMPOSER_RUN_OPTIONS=install
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD [ "unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock" ]
+CMD ["unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock"]
 
 LABEL maintainer="Thierry Feuzeu <thierry.feuzeu@gmail.com>" \
   org.opencontainers.image.source="https://github.com/lagdo/docker" \
