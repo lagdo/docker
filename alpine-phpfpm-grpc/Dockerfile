@@ -1,7 +1,7 @@
 ARG ALPINE_VERSION=3.22
 ARG PHP_VERSION=8.4
 ARG PROTOBUF_VERSION=4.33.0
-ARG PHP_ALPINE_VERSION=${PHP_VERSION}-alpine${ALPINE_VERSION}
+ARG PHP_ALPINE_VERSION=${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
 
 # PHP extension installer
 FROM mlocati/php-extension-installer:2 AS php-extension-installer
@@ -25,6 +25,11 @@ RUN set -xe && \
   echo "extension=grpc.so" > /usr/local/etc/php/conf.d/grpc.ini
 
 COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
+
+RUN set -xe && \
+  apk add --no-cache --virtual .build-deps pcre-dev pcre && \
+  install-php-extensions opcache zip intl sockets bcmath \
+    ctype phar dom fileinfo gd mbstring openssl redis tokenizer
 
 # PHP Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
