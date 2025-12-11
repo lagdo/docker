@@ -7,6 +7,6 @@ if [ "${1#-}" != "$1" ]; then
 fi
 
 # Install Composer packages
-/usr/local/bin/php-install.sh
+/usr/local/bin/php-command.sh
 
 exec "$@"

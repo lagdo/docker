@@ -50,14 +50,14 @@ RUN cp -R /opt/unit/usr/local/* /usr/local
 
 # Copy Nginx Unit entry point and PHP install scripts
 COPY ./entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-COPY ./php-install.sh /usr/local/bin/php-install.sh
+COPY ./php-command.sh /usr/local/bin/php-command.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
-  chmod +x /usr/local/bin/php-install.sh
+  chmod +x /usr/local/bin/php-command.sh
 
 # By default, run composer install with no additional option
-ENV COMPOSER_RUN=false
-ENV COMPOSER_RUN_USER=
-ENV COMPOSER_RUN_OPTIONS=install
+ENV RUN_INSTALL=false
+ENV COMMAND_USER=
+ENV INSTALL_OPTIONS=install
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock"]
