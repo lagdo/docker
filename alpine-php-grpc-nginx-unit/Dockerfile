@@ -1,6 +1,6 @@
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.23
 ARG PHP_VERSION=8.4
-ARG UNIT_VERSION=1.34.2
+ARG UNIT_VERSION=1.35.0
 ARG PHP_ALPINE_VERSION=${PHP_VERSION}-zts-alpine${ALPINE_VERSION}
 
 # Nginx Unit downloader
@@ -30,6 +30,8 @@ RUN set -eux && \
 
 # Root builder
 FROM lagdo/alpine-php-zts-grpc
+
+RUN set -xe && apk update && apk upgrade --no-cache --available
 
 RUN install-php-extensions opcache zip intl sockets bcmath ctype phar \
   curl dom fileinfo gd mbstring openssl redis tokenizer && \

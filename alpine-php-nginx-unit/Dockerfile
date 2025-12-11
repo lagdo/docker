@@ -1,6 +1,6 @@
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.23
 ARG PHP_VERSION=8.4
-ARG UNIT_VERSION=1.34.2
+ARG UNIT_VERSION=1.35.0
 ARG PHP_ALPINE_VERSION=${PHP_VERSION}-zts-alpine${ALPINE_VERSION}
 
 # PHP extension installer
@@ -33,6 +33,8 @@ RUN set -eux && \
 
 # Root builder
 FROM php:${PHP_ALPINE_VERSION}
+
+RUN set -xe && apk update && apk upgrade --no-cache --available
 
 COPY --from=php-extension-installer ["/usr/bin/install-php-extensions", "/usr/local/bin/install-php-extensions"]
 

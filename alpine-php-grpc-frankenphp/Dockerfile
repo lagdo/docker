@@ -7,6 +7,8 @@ FROM mlocati/php-extension-installer:2 AS php-extension-installer
 
 FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-alpine
 
+RUN set -xe && apk update && apk upgrade --no-cache --available
+
 ARG PROTOBUF_VERSION
 RUN set -xe && \
   apk add --no-cache git autoconf libzip-dev freetype-dev icu-dev \

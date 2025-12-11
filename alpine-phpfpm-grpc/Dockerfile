@@ -1,4 +1,4 @@
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.23
 ARG PHP_VERSION=8.4
 ARG PROTOBUF_VERSION=4.33.0
 ARG PHP_ALPINE_VERSION=${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
@@ -7,6 +7,8 @@ ARG PHP_ALPINE_VERSION=${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
 FROM mlocati/php-extension-installer:2 AS php-extension-installer
 
 FROM php:${PHP_ALPINE_VERSION}
+
+RUN set -xe && apk update && apk upgrade --no-cache --available
 
 ARG PROTOBUF_VERSION
 RUN set -xe && \

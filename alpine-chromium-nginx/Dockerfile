@@ -1,4 +1,4 @@
-FROM alpine:3.22
+FROM alpine:3.23
 
 # Default values for env vars.
 ENV NGINX_PORT=9222
@@ -7,6 +7,7 @@ ENV NGINX_DENY=all
 
 # Installs latest Chromium package.
 RUN set -xe && \
+  apk update && \
   apk upgrade --no-cache --available && \
   apk add --no-cache sed runit nginx chromium \
     ttf-freefont font-noto-emoji font-montserrat && \
